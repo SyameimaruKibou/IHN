@@ -90,6 +90,7 @@ class Logger:
 def sequence_loss(flow_preds, flow_gts, gamma=0.85, iters_lev0=6):
     """ Loss function defined over sequence of flow predictions """
 
+    # Not consider iters_lev1 yet
     flow_loss = 0.0
     n_predictions = len(flow_preds)
 

@@ -103,6 +103,7 @@ class IHN(nn.Module):
         sz = fmap1_32.shape
         self.sz = sz
         four_point_disp = torch.zeros((sz[0], 2, 2, 2)).to(fmap1.device)
+        flow_predictions = torch.zeros((iters_lev0+1, sz[0], 2, 2, 2)).to(fmap1.device)
 
         for itr in range(iters_lev0):
             corr = corr_fn(coords1)
@@ -115,6 +116,7 @@ class IHN(nn.Module):
                     
             four_point_disp =  four_point_disp + delta_four_point
             coords1 = self.get_flow_now_4(four_point_disp)
+            flow_predictions[itr+1] = four_point_disp
 
 
         if self.args.lev1:# next resolution
@@ -148,7 +150,7 @@ class IHN(nn.Module):
             four_point_disp = four_point_disp + four_point_disp_med
 
 
-        return four_point_disp
+        return four_point_disp, flow_predictions
 
 
 
